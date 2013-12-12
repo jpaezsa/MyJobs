@@ -7,35 +7,35 @@
     {% paginate candidates %}    
                        
         <table id="row-link-table">
-            {% for candidate in candidates %}                    
-            <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}';">
+            {% for candidate, savedsearch in candidates.items %}
+            <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.id }}&anchor={{ forloop.counter }}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}';">
                 <td>
-                    <span class="gravatar pull-left">{% get_gravatar candidate.user '55' %}</span>                        
+                    <span class="gravatar pull-left">{% get_gravatar candidate '55' %}</span>
                 </td>
                 <td>
-                    <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
-                    <a name="{{ candidate.user.id }}{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}"></a>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ candidate.user.id }}{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate.user}}</a>
+                    <div class="candidate-name">{{candidate|get_name_obj}}</div>
+                    <a name="{{ candidate.id }}{% if savedsearch.0.label %}{{savedsearch.0.label}}{% else %}Unlabeled{% endif %}"></a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.id }}&anchor={{ candidate.id }}{% if savedsearch.0.label %}{{savedsearch.0.label}}{% else %}Unlabeled{% endif %}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate}}</a>
                     <div class="progress activity-progress">
-                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
+                        <div class="bar bar-{% completion_level candidate.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
                     </div>
                 </td>
                 <td>
-                    <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
-                    {{candidate.url|url_domain}}<br>
-                    {{candidate.created_on.date}}                    
+                    <strong>{% if savedsearch.0.label %}{{savedsearch.0.label}}{% else %}Unlabeled{% endif %}</strong><br>
+                    {{savedsearch.0.url|url_domain}}<br>
+                    {{savedsearch.0.created_on.date}}
                 </td>
              </tr>
              <tr class="candidate-activity-mobile">
                 <td>
-                    <span class="gravatar pull-left">{% get_gravatar candidate.user '45' %}</span> 
+                    <span class="gravatar pull-left">{% get_gravatar candidate '45' %}</span>
                 </td>
                 <td>
-                    <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <div class="candidate-name pull-left">{{candidate|get_name_obj}}</div>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.id }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}" class="candidate-activity-mobile pull-left">{{candidate}}</a>
                     <br>
                     <div class="progress activity-progress">
-                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
+                        <div class="bar bar-{% completion_level candidate.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
                     </div>
                 </td>
              </tr>

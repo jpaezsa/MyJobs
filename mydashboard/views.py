@@ -144,19 +144,23 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                     user__opt_in_employers=False).order_by('-created_on')
     except:
         raise Http404
-    
+
+    user_ss = {}
+    for k, v in groupby(candidate_searches, lambda x: x.user):
+        user_ss[k] = list(v)
+
     admin_you = request.user
 
     # List of dashboard widgets to display.
     dashboard_widgets = ["candidates"]
-    
+
     context = {'company_name': company.name,
                'company_microsites': authorized_microsites,
                'company_admins': admins,
                'company_id': company.id,
                'after': after,
-               'before': before,                 
-               'candidates': candidate_searches,                
+               'before': before,
+               'candidates': user_ss,
                'admin_you': admin_you,
                'site_name': site_name,
                'view_name': 'Company Dashboard',
